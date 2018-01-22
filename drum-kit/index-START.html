@@ -58,11 +58,35 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  //Create an event listener for when a key is pressed
   window.addEventListener("keydown", event =>
   {
-    console.log(event.keyCode);
+    //Find the audio element with the code for the key pressed
     const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+    console.log(audio);
+
+    //If the element with the key isn't found stop the function
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play();
+    key.className = "key playing";
+    key.classList.add("playing")
   });
+
+  //Select all the keys (stored as an array)
+  const keys = document.querySelectorAll(".key");
+  //Loop over the keys and add an event listener for the transition ending
+  keys.forEach(key => 
+  {
+    key.addEventListener("transitionend", function (event)
+    {
+      //End the function if it isnt a transform
+      if (event.propertyName !== "transform") return;
+      //this will be equal to the thing the current function was called on (key)
+      this.classList.remove("playing");
+    });
+  }, this);
 </script>
 
 
